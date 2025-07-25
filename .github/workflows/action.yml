@@ -33,6 +33,17 @@ jobs:
               ghcr.io/${{ github.repository_owner }}/react-app:${{github.sha}}
 
 
+    show-readme:
+      name: Show README
+      needs: docker
+      runs-on: self-hosted
+      steps:
+        - name: Checkout Repo
+          uses: actions/checkout@v4
+        - name: Show README
+          run: cat README.md
+
+
           
 
 
