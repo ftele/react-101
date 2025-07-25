@@ -8,40 +8,51 @@ on:
   workflow_dispatch:
     
 jobs:
+  docker:
+    name: Containerization
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/react-app:${{github.sha}}
 
-    docker:
-      name: Containerization
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout Repo
-          uses: actions/checkout@v4
-                
-        - name: Login to GitHub Container Registry
-          uses: docker/login-action@v3
-          with:
-            registry: ghcr.io
-            username: ${{ github.repository_owner }}
-            password: ${{ secrets.GITHUB_TOKEN }}
-                
+  show-readme:
+    name: Show README
+    needs: docker
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Show README
+        run: cat README.md
 
-        - name: Build and push docker image
-          uses: docker/build-push-action@v6
-          with:
-            context: .
-            push: true
-            tags: |
-              ghcr.io/${{ github.repository_owner }}/react-app:${{github.sha}}
-
-
-    show-readme:
-      name: Show README
-      needs: docker
-      runs-on: self-hosted
-      steps:
-        - name: Checkout Repo
-          uses: actions/checkout@v4
-        - name: Show README
-          run: cat README.md
+  deploy-compose:
+    name: Deploy with Docker Compose
+    needs: docker
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker Compose Up
+        run: docker-compose up -d --pull always
 
 
           
