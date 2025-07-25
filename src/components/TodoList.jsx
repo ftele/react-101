@@ -3,7 +3,7 @@ import TodoItem from "./TodoItem";
 const TodoList = ({ todos, remove, update }) => {
   return (
     <div className="list-container">
-      <h2>Todos List</h2>
+      <h2>To Do List</h2>
       <div className="list">
         {todos.map((todo) => (
           <TodoItem
