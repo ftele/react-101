@@ -41,6 +41,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set IMAGE_TAG env file
+        run: echo "IMAGE_TAG=ghcr.io/${{ github.repository_owner }}/react-app:${{github.sha}}" > .env
       - name: Docker Compose Up
         run: docker compose up -d --pull always
 
