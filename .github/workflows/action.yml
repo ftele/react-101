@@ -52,7 +52,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker Compose Up
-        run: docker-compose up -d --pull always
+        run: docker compose up -d --pull always
 
 
           
