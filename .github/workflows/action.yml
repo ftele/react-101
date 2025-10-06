@@ -28,23 +28,22 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/react-app:${{github.sha}}
 
-  deploy-compose:
-    name: Deploy with Docker Compose
+  security-scan:
+    name: Security Analysis
+    runs-on: ubuntu-latest
     needs: docker
-    runs-on: self-hosted
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.33.1
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set IMAGE_TAG env file
-        run: echo "IMAGE_TAG=ghcr.io/${{ github.repository_owner }}/react-app:${{github.sha}}" > .env
-      - name: Docker Compose Up
-        run: docker compose up -d --pull always
+          image-ref: 'ghcr.io/${{ github.repository_owner }}/react-app:${{github.sha}}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
 
 
           
