@@ -1,4 +1,4 @@
-name: Dependency Review
+name: Dependency Security Review
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   dependency-review:
-    name: Dependency Security Analysis
+    name: Dependency Security Analysis 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
