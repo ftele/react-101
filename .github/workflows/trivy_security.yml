@@ -1,4 +1,4 @@
-name: TrivySecurity Scan
+name: Trivy Security Scan
 
 on: 
   pull_request:
