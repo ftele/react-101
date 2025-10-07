@@ -1,0 +1,36 @@
+name: Trivy Filesystem Security Scan
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  trivy-fs-scan:
+    name: Filesystem Security Analysis with Trivy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run Trivy vulnerability scanner (filesystem)
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          scanners: 'vuln,secret,license'
+          cache: 'true'
