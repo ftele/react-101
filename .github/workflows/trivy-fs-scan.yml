@@ -4,14 +4,10 @@ on:
   pull_request:
     branches:
       - master
-  push:
-    branches:
-      - master
-  workflow_dispatch:
 
 jobs:
   trivy-fs-scan:
-    name: Filesystem Security Analysis
+    name: Filesystem Security Analysis with Trivy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
