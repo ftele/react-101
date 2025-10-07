@@ -33,5 +33,4 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
           scanners: 'vuln,secret,license'
-          include-dev-deps: 'true'
           cache: 'true'
