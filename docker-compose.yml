@@ -5,6 +5,3 @@ services:
     ports:
       - "8081:80"
     restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - POSTGRES_PASSWORD=password
