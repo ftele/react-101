@@ -1,4 +1,4 @@
-name: Trivy Filesystem Security Scan
+name: FileSystem Security Scan and Secret Detection
 
 on:
   pull_request:
@@ -34,3 +34,20 @@ jobs:
           severity: 'CRITICAL,HIGH'
           scanners: 'vuln,secret,license'
           cache: 'true'
+
+  gitleaks-scan:
+    name: Secret Detection with Gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run Gitleaks secret scanner
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_COMMENTS: false
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
+          GITLEAKS_ENABLE_SUMMARY: true
